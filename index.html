@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>静心等待、</title>
+    <style>
+        html,body,div,ul,li,img{
+            margin:0;
+            padding:0;
+        }
+        ul>li{
+            list-style:none;
+        }
+        #btnList{
+            width:360px;
+            margin: 10px auto;
+        }
+        #box{
+            margin:20px auto ;
+        }
+        #bg{
+            width: 500px;
+            height:360px;
+            margin: 0 auto;
+            position: relative;
+        }
+        #bg img{
+            width:100%;
+            height:100%;
+        }
+        ul{
+            background: #454545;
+            width:100%;
+            height:100%;
+        }
+        li{
+            float: left;
+            width:120px;
+            height:120px;
+        }
+        .last{
+            background: none;
+        }
+        ul li img{
+            width:100%;
+            height:100%;
+            border: 1px solid blue;
+        }
+    </style>
+</head>
+<body>
+<div id="btnList">
+    <button>第一关</button>
+    <button>第二关</button>
+    <button>第三关</button>
+    <button>第四关</button>
+    <button>第五关</button>
+    <button>第六关</button>
+</div>
+<div id="box">
+<div id="bg">
+    <img src="img0/bg.jpg" alt="心若向阳，无畏悲伤">
+</div>
+</div>
+</body>
+</html>
+<script>
+    var box=document.getElementById("box");
+    var btnList=document.getElementById("btnList");
+    var btn=btnList.getElementsByTagName("button");
+    var num=[9,12,16,20,25,36];
+    for(let i=0;i<btn.length;i++){
+        btn[i].onclick=function(){
+            box.innerHTML=null;
+            var sub=num[i];
+            Puzzle(i,sub);
+        };
+    }
+    function Puzzle(index,sub){
+        if(sub===num[0]){
+            box.style.width=362+"px";
+            box.style.height=362+"px";
+        }else if(sub===num[1]){
+            box.style.width=482+"px";
+            box.style.height=362+"px";
+        }else if(sub===num[2]){
+            box.style.width=482+"px";
+            box.style.height=482+"px";
+        }else if(sub===num[3]){
+            box.style.width=602+"px";
+            box.style.height=482+"px";
+        }else if(sub===num[4]){
+            box.style.width=602+"px";
+            box.style.height=602+"px";
+        }else if(sub===num[5]){
+            box.style.width=722+"px";
+            box.style.height=722+"px";
+        }
+        var ul=document.createElement("ul");
+        box.appendChild(ul);
+        var ary=[];
+        var a=null;
+        while(ary.length<sub-1){
+            a=Math.round(Math.random()*(sub-2)+0);
+            if(!ary.includes(a)){
+                ary.push(a);
+            }
+        }
+        for(var i=0;i<ary.length;i++){
+            var li=document.createElement("li");
+            var img=document.createElement("img");
+            img.src="img"+index+"\/"+ary[i]+".jpg";
+            li.appendChild(img);
+            ul.appendChild(li);
+        }
+        var last=document.createElement("li");
+        ul.appendChild(last);
+        last.className="last";
+        var list=ul.getElementsByTagName("li");
+        for(var i=list.length-1;i>=0;i--){
+            list[i].style.left=(list[i].l=list[i].offsetLeft)+"px";
+            list[i].style.top=(list[i].t=list[i].offsetTop)+"px";
+            list[i].style.position="absolute";
+            list[i].style.margin=0;
+        }
+        var minL=list[0].offsetLeft,maxL=list[list.length-1].offsetLeft,minT=list[0].offsetTop,maxT=list[list.length-1].offsetTop-list[0].offsetTop;
+        document.onkeyup=function(e){
+            if(e.keyCode==39){
+                if(last.l>minL){
+                    if(last.previousElementSibling){
+                        last.style.left=last.previousElementSibling.l+"px";
+                        last.previousElementSibling.style.left=last.l+"px";
+                        last.style.top=last.previousElementSibling.t+"px";
+                        last.previousElementSibling.style.top=last.t+"px";
+                        last.l=parseInt(last.style.left);
+                        last.previousElementSibling.l=parseInt(last.previousElementSibling.style.left);
+                        last.t=parseInt(last.style.top);
+                        last.previousElementSibling.t=parseInt(last.previousElementSibling.style.top);
+                        ul.insertBefore(last,last.previousElementSibling);
+                    }
+                }
+            }
+            else if(e.keyCode==37){
+                if(last.l<maxL){
+                    if(last.nextElementSibling){
+                        last.style.left=last.nextElementSibling.l+"px";
+                        last.nextElementSibling.style.left=last.l+"px";
+                        last.style.top=last.nextElementSibling.t+"px";
+                        last.nextElementSibling.style.top=last.t+"px";
+                        last.l=parseInt(last.style.left);
+                        last.nextElementSibling.l=parseInt(last.nextElementSibling.style.left);
+                        last.t=parseInt(last.style.top);
+                        last.nextElementSibling.t=parseInt(last.nextElementSibling.style.top);
+                        ul.insertBefore(last.nextElementSibling,last);}
+                }
+            }
+
+            else if(e.keyCode==40) {
+                if (last.t >minT) {
+                    if(sub===num[0]){(function(){ var next = last.previousElementSibling.previousElementSibling.previousElementSibling;
+                        console.log(last.previousElementSibling.previousElementSibling.previousElementSibling);
+                        if (next){
+                            var prevNext = next.nextElementSibling;
+                            last.style.top = next.t+"px";
+                            next.style.top = last.t + "px";
+                            last.style.left = next.l+"px";
+                            next.style.left = last.l + "px";
+                            last.t = parseInt(last.style.top);
+                            next.t = parseInt((next).style.top);
+                            last.l = parseInt(last.style.left);
+                            next.l = parseInt((next).style.left);
+                            ul.insertBefore(next, last.nextElementSibling);
+                            ul.insertBefore(last, prevNext);}
+
+                    })()}
+                    else if(sub===num[1]||sub===num[2]){(function(){ var next = last.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling;
+                        console.log(last.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling);
+                        if (next){
+                            var prevNext = next.nextElementSibling;
+                            last.style.top = next.t+"px";
+                            next.style.top = last.t + "px";
+                            last.style.left = next.l+"px";
+                            next.style.left = last.l + "px";
+                            last.t = parseInt(last.style.top);
+                            next.t = parseInt((next).style.top);
+                            last.l = parseInt(last.style.left);
+                            next.l = parseInt((next).style.left);
+                            ul.insertBefore(next, last.nextElementSibling);
+                            ul.insertBefore(last, prevNext);
+                        }})()}
+                    else if(sub===num[3]||sub===num[4]){(function(){ var next = last.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling;
+                        console.log(last.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling);
+                        if (next){
+                            var prevNext = next.nextElementSibling;
+                            last.style.top = next.t+"px";
+                            next.style.top = last.t + "px";
+                            last.style.left = next.l+"px";
+                            next.style.left = last.l + "px";
+                            last.t = parseInt(last.style.top);
+                            next.t = parseInt((next).style.top);
+                            last.l = parseInt(last.style.left);
+                            next.l = parseInt((next).style.left);
+                            ul.insertBefore(next, last.nextElementSibling);
+                            ul.insertBefore(last, prevNext);
+                        }})()}
+                    else if(sub===num[5]){(function(){ var next = last.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling;
+                        console.log(last.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling);
+                        if (next){
+                            var prevNext = next.nextElementSibling;
+                            last.style.top = next.t+"px";
+                            next.style.top = last.t + "px";
+                            last.style.left = next.l+"px";
+                            next.style.left = last.l + "px";
+                            last.t = parseInt(last.style.top);
+                            next.t = parseInt((next).style.top);
+                            last.l = parseInt(last.style.left);
+                            next.l = parseInt((next).style.left);
+                            ul.insertBefore(next, last.nextElementSibling);
+                            ul.insertBefore(last, prevNext);
+                        }})()}
+                }
+            }
+            else if(e.keyCode==38){
+                if (last.t<=maxT){
+                    if(sub===num[0]){(function(){
+                        var prev = last.nextElementSibling.nextElementSibling.nextElementSibling;
+                        if (prev) {
+                            var lastNext = last.nextElementSibling;
+                            last.style.top = prev.t+"px";
+                            prev.style.top = last.t + "px";
+                            last.style.left = prev.l+"px";
+                            prev.style.left = last.l + "px";
+                            last.t = parseInt(last.style.top);
+                            prev.t = parseInt((prev).style.top);
+                            last.l = parseInt(last.style.left);
+                            prev.l = parseInt((prev).style.left);
+                            ul.insertBefore(last, prev);
+                            ul.insertBefore(prev, lastNext);
+                        }
+                    }())}
+                    else if(sub===num[1]||sub===num[2]){(function(){
+                        var prev = last.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling;
+                        if (prev) {
+                            var lastNext = last.nextElementSibling;
+                            last.style.top = prev.t+"px";
+                            prev.style.top = last.t + "px";
+                            last.style.left = prev.l+"px";
+                            prev.style.left = last.l + "px";
+                            last.t = parseInt(last.style.top);
+                            prev.t = parseInt((prev).style.top);
+                            last.l = parseInt(last.style.left);
+                            prev.l = parseInt((prev).style.left);
+                            ul.insertBefore(last, prev);
+                            ul.insertBefore(prev, lastNext);
+                        }
+                    })()}
+                    else if(sub===num[3]||sub===num[4]){(function(){
+                        var prev = last.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling;
+                        if (prev) {
+                            var lastNext = last.nextElementSibling;
+                            last.style.top = prev.t+"px";
+                            prev.style.top = last.t + "px";
+                            last.style.left = prev.l+"px";
+                            prev.style.left = last.l + "px";
+                            last.t = parseInt(last.style.top);
+                            prev.t = parseInt((prev).style.top);
+                            last.l = parseInt(last.style.left);
+                            prev.l = parseInt((prev).style.left);
+                            ul.insertBefore(last, prev);
+                            ul.insertBefore(prev, lastNext);
+                        }
+                    })()}
+                    else if(sub===num[5]){(function(){
+                        var prev = last.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling;
+                        if (prev) {
+                            var lastNext = last.nextElementSibling;
+                            last.style.top = prev.t+"px";
+                            prev.style.top = last.t + "px";
+                            last.style.left = prev.l+"px";
+                            prev.style.left = last.l + "px";
+                            last.t = parseInt(last.style.top);
+                            prev.t = parseInt((prev).style.top);
+                            last.l = parseInt(last.style.left);
+                            prev.l = parseInt((prev).style.left);
+                            ul.insertBefore(last, prev);
+                            ul.insertBefore(prev, lastNext);
+                        }
+                    })()}
+                }
+            }
+        };
+    }
+</script>
